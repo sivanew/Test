@@ -1,7 +1,12 @@
 package com.hcl.customer.serviceimpl;
 
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,50 +31,51 @@ public class CustomerServiceImplTest {
 	@MockBean
 	private CustomerRepository custRepo;
 
-	/*
-	 * @Test public void getCustomerByLastNameTest() { String name = "Test";
-	 * when(custRepo.findByLastName(name)) .thenReturn(Stream.of(new Customer(1000L,
-	 * "Test", "Test")).collect(Collectors.toList()));
-	 * 
-	 * assertEquals(1, custSer.getCustomerByLastName(name).size());
-	 * 
-	 * }
-	 */
+	@Test
+	public void getCustomersTest() {
+		String lastname = "Test";
+		when(custRepo.findByLastName(lastname))
+				.thenReturn(Stream.of(new Customer(1000L, "Test", "Test")).collect(Collectors.toList()));
 
-	/*
-	 * @Test public void getCustomerByLastNameNotNullTest() { String name = "Test";
-	 * when(custRepo.findByLastName(name)).thenReturn(Stream .of(new Customer(1000L,
-	 * "Test", "Test"), new Customer(1000L, "", "")).collect(Collectors.toList()));
-	 * 
-	 * assertNotEquals(1, custSer.getCustomerByLastName(name).size());
-	 * 
-	 * }
-	 */
-	
+		assertEquals(1, custSer.getCustomers(lastname).size());
+
+	}
+
+	@Test
+	public void getCustomerByLastNameNotNullTest() {
+		String lastname = "Test";
+		when(custRepo.findByLastName(lastname))
+				.thenReturn(Stream.of(new Customer(1000L, "Test", "Test"), new Customer(1000L, "Test", "Test"))
+						.collect(Collectors.toList()));
+
+		assertNotEquals(1, custSer.getCustomers(lastname).size());
+
+	}
+
 	@Test
 	public void saveCustomerTest() {
-		CustomerUpdateVO cust=new CustomerUpdateVO();
+		CustomerUpdateVO cust = new CustomerUpdateVO();
 		cust.setFirstName("firstName");
 		cust.setLastName("lname");
-		
-		CustomerUpdateVO custVO=custSer.saveCustomer(cust);
+
+		CustomerUpdateVO custVO = custSer.saveCustomer(cust);
 		assertNotNull(custVO);
 	}
-	
+
 	@Test
 	public void updateCustomerTest() {
-		CustomerUpdateVO cust=new CustomerUpdateVO();
+		CustomerUpdateVO cust = new CustomerUpdateVO();
 		cust.setFirstName("firstName");
 		cust.setLastName("lname");
-		CustomerUpdateVO custVO=custSer.updateCustomer(cust,123456l);
+		CustomerUpdateVO custVO = custSer.updateCustomer(cust, 123456l);
 		assertNotNull(custVO);
 	}
-	
+
 	@Test
 	public void deleteCustomerTest() {
 		boolean deleteRecord = custSer.deleteCustomer(123456l);
 		assertEquals(deleteRecord, true);
 
 	}
-	
+
 }

@@ -1,5 +1,6 @@
 package com.hcl.customer.serviceImpl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,14 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public Customer getCustomer(Long id) {
 		return this.custRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("The id is invalid"));
+	}
+
+	@Override
+	public List<Customer> getCustomers(String lastname) {
+		
+		List<Customer> custList = custRepo.findByLastName(lastname);
+		
+		return custList;
 	}
 
 }

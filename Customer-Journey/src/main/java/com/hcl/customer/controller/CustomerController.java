@@ -1,5 +1,7 @@
 package com.hcl.customer.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,15 @@ public class CustomerController {
 
 	@Autowired
 	private CustomerService custService;
+	
+	@GetMapping(value = "custList/{lastname}")
+	public ResponseEntity<List<Customer>> getCustomers(@PathVariable("lastname") String lastname){
+		List<Customer> custList=null;
+		if(lastname!=null) {
+			custList = custService.getCustomers(lastname);
+		}
+		return new ResponseEntity<>(custList, HttpStatus.OK);
+	}
 
 	@GetMapping(value = "getCustomer/{id}")
 	public ResponseEntity<Customer> getCustomer(@PathVariable("id") Long id) {
